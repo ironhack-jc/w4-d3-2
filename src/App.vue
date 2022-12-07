@@ -1,8 +1,9 @@
 <template>
   <div>
-    <AppHeader :count="numberOfItems" />
+    <AppHeader :count="numberOfItems" @refresh="fetchApi" />
 
-    <Cart :items="items" />
+    <div v-if="loading">Loading ....</div>
+    <Cart v-else :items="items" />
 
     <!-- <app-footer /> -->
     <AppFooter :isMobile="!isDesktop" :submenu="menu" />
@@ -25,6 +26,7 @@ export default {
   },
   data() {
     return {
+      loading: true,
       items: [],
       isDesktop: true,
       menu: ["Productos", "Servicios", "Contacta"],
@@ -42,9 +44,18 @@ export default {
     },
   },
   methods: {
-    async fetchApi() {
-      const response = await fetch(API_URL);
-      this.items = await response.json();
+    async fetchApi(count) {
+      console.log(count)
+
+      this.loading = true;
+      setTimeout(async () => {
+        console.log("Loaded")
+
+        const response = await fetch(API_URL);
+        this.items = await response.json();
+        this.loading = false;
+      }, 3000)
+
     },
 
     validateForm() {
@@ -61,6 +72,7 @@ export default {
 table {
   width: 100%;
 }
+
 table tfoot tr th {
   text-align: right;
 }

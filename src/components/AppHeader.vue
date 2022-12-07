@@ -3,18 +3,19 @@
     <img src="../assets/logo.png" width="32" />
     <div>My carrito superpower</div>
     <div>{{ count }}</div>
-    <button @click="showCount">Show count!</button>
+    <button @click="refresh">Refresh!</button>
   </header>
 </template>
 
 <script>
 export default {
   props: ["count"],
+  emits: ["refresh"],
   methods: {
-    showCount() {
-      alert(this.count);
-    },
-  },
+    refresh() {
+      this.$emit('refresh', this.count)
+    }
+  }
 };
 </script>
 
